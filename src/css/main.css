@@ -1,0 +1,153 @@
+/* the whole design system lives here. tailwind v4 reads the tokens out of @theme, so there's no tailwind.config.js */
+@import 'tailwindcss';
+
+@theme {
+    /* caprasimo is the closest free match to the chunky red letters over the shop */
+    --font-display: 'Caprasimo', 'Cooper Black', Georgia, serif;
+    --font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+
+    /* navy = the awning */
+    --color-navy-950: #0c1230;
+    --color-navy-900: #141c44;
+    --color-navy-800: #1c2759;
+    --color-navy-700: #283676;
+
+    /* denim = their business card */
+    --color-denim-600: #2a5a92;
+    --color-denim-500: #3a74b3;
+    --color-denim-300: #a3c2e2;
+    --color-denim-100: #e1ebf6;
+
+    /* sign = the red channel letters */
+    --color-sign-700: #a8161c;
+    --color-sign-600: #c81e25;
+    --color-sign-500: #e2262d;
+
+    /* canvas = blank shirt, basically */
+    --color-canvas-50: #fbf7ee;
+    --color-canvas-100: #f4ecdb;
+    --color-canvas-200: #e8dcc3;
+
+    /* thread = the gold they stitch the city seal in */
+    --color-thread-300: #f8d06b;
+    --color-thread-400: #f2b632;
+    --color-thread-500: #dc9c0f;
+
+    /* neon = the YOUR LOGO sign in the window */
+    --color-neon-blue: #6cc4ff;
+    --color-neon-red: #ff5b47;
+
+    /* hoop = the wooden embroidery hoops the round photos sit in */
+    --color-hoop-300: #e6c594;
+    --color-hoop-500: #c2955a;
+    --color-hoop-700: #96703c;
+
+    --color-ink: #121833;
+}
+
+/* ---------- base ---------- */
+
+/* in a layer so a utility class on the element can still override these */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-canvas-50 font-sans text-ink antialiased;
+    }
+
+    h1,
+    h2,
+    h3 {
+        @apply font-display font-normal;
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
+    }
+
+    ::selection {
+        background: var(--color-thread-300);
+        color: var(--color-ink);
+    }
+}
+
+/* not in a layer on purpose. keyboard focus should beat the stitched outlines every time */
+:focus-visible {
+    outline: 3px solid var(--color-thread-400);
+    outline-offset: 3px;
+}
+
+/* ---------- stitching ---------- */
+
+/* a dashed outline pulled inside the edge reads as a running stitch. pair it with an
+   outline color class, like: stitch outline-navy-900/25 */
+@utility stitch {
+    outline-style: dashed;
+    outline-width: 2px;
+    outline-offset: -9px;
+}
+
+@utility stitch-tight {
+    outline-style: dashed;
+    outline-width: 1.5px;
+    outline-offset: -5px;
+}
+
+/* ---------- fabrics ---------- */
+
+/* navy with a faint diagonal twill so the dark sections don't look flat */
+@utility denim {
+    background-color: var(--color-navy-900);
+    background-image:
+        repeating-linear-gradient(135deg, rgb(255 255 255 / 0.045) 0 1px, transparent 1px 4px),
+        repeating-linear-gradient(45deg, rgb(0 0 0 / 0.16) 0 1px, transparent 1px 3px);
+}
+
+/* cream with a barely there grid, like aida cloth */
+@utility weave {
+    background-color: var(--color-canvas-100);
+    background-image:
+        repeating-linear-gradient(0deg, rgb(20 28 68 / 0.04) 0 1px, transparent 1px 5px),
+        repeating-linear-gradient(90deg, rgb(20 28 68 / 0.04) 0 1px, transparent 1px 5px);
+}
+
+/* ---------- awning ---------- */
+
+/* the scalloped edge under the awning band. it's just a row of half circles, and the negative
+   margin lets it hang down over whatever section comes next */
+.awning-valance {
+    position: relative;
+    z-index: 10;
+    margin-bottom: -16px;
+    height: 16px;
+    background: radial-gradient(circle at 16px 0, var(--color-navy-900) 15.5px, transparent 16px) 0 0 / 32px 100% repeat-x;
+}
+
+/* ---------- neon ---------- */
+
+.neon-blue {
+    filter: drop-shadow(0 0 3px var(--color-neon-blue)) drop-shadow(0 0 12px rgb(108 196 255 / 0.55));
+}
+
+.neon-red {
+    filter: drop-shadow(0 0 3px var(--color-neon-red)) drop-shadow(0 0 12px rgb(255 91 71 / 0.6));
+}
+
+/* ---------- motion ---------- */
+
+/* things lift a little on hover and that's about it. no moving text anywhere */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
